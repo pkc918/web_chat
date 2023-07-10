@@ -1,0 +1,10 @@
+server:
+  port: 8080
+datasource:
+  driverName: mysql
+  host: 127.0.0.1
+  port: 3306
+  database: web_chat
+  username: root
+  password: Pankechun2000918
+  charset: utf8mb4
