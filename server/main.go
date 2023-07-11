@@ -2,6 +2,7 @@ package main
 
 import (
 	"database/sql"
+	"web_chat/server/db"
 	"web_chat/server/initialize"
 	"web_chat/server/router"
 
@@ -13,7 +14,7 @@ func main() {
 	initialize.InitConfig()
 
 	initPort := initialize.GetPort()
-	db := initialize.InitDb()
+	db := db.InitDb()
 	sqlDb, _ := db.DB()
 	defer func(sqlDb *sql.DB) {
 		_ = sqlDb.Close()
