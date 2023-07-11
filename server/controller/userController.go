@@ -10,6 +10,8 @@ import (
 
 func Register(context *gin.Context) {
 	var r reqModel.Register
+	var user model.User
+
 	err := context.ShouldBindJSON(&r)
 	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{
@@ -23,17 +25,26 @@ func Register(context *gin.Context) {
 
 	// 多前端传递过来的注册数据做数据库处理
 	// 1. 用户是否已经注册
-	var user model.User
+
 	DB := db.GetDB()
 	err = DB.AutoMigrate(&user)
 	if err != nil {
 		return
 	}
-	result := DB.Where("mobile = ?", r.Mobile).First(&user)
+	result := DB.Where("mobile = ?", r.Mobile)
 	if result.RowsAffected != 1 {
 		// 不存在用户
 		// 3. 注册成功，入库
-		DB.Create(&r)
+		user = model.User{
+			Email:    r.Email,
+			Mobile:   r.Mobile,
+			PassWord: r.PassWord,
+			Avatar:   r.Avatar,
+			Sex:      r.Sex,
+			Nickname: r.Nickname,
+		}
+
+		DB.Create(&user)
 		// 做参数判断和结果返回，设计数据库操作，都调用 service 内封装的方法
 		context.JSON(http.StatusOK, gin.H{
 			"code": 200,
