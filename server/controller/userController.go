@@ -3,15 +3,15 @@ package controller
 import (
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"web_chat/server/db"
 	"web_chat/server/model"
 	reqModel "web_chat/server/model/request"
+	"web_chat/server/service"
 )
 
-func Register(context *gin.Context) {
-	var r reqModel.Register
-	var user model.User
+var r reqModel.Register
+var userService service.UserService
 
+func Register(context *gin.Context) {
 	err := context.ShouldBindJSON(&r)
 	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{
@@ -23,33 +23,24 @@ func Register(context *gin.Context) {
 		return
 	}
 
-	// 多前端传递过来的注册数据做数据库处理
-	// 1. 用户是否已经注册
+	// 这里要做验证，验证参数的格式等等
 
-	DB := db.GetDB()
-	err = DB.AutoMigrate(&user)
-	if err != nil {
-		return
+	// 合格数据
+	user := &model.User{
+		Email:    r.Email,
+		Mobile:   r.Mobile,
+		PassWord: r.PassWord,
+		Avatar:   r.Avatar,
+		Sex:      r.Sex,
+		Nickname: r.Nickname,
 	}
-	result := DB.Where("mobile = ?", r.Mobile)
-	if result.RowsAffected != 1 {
-		// 不存在用户
-		// 3. 注册成功，入库
-		user = model.User{
-			Email:    r.Email,
-			Mobile:   r.Mobile,
-			PassWord: r.PassWord,
-			Avatar:   r.Avatar,
-			Sex:      r.Sex,
-			Nickname: r.Nickname,
-		}
-
-		DB.Create(&user)
-		// 做参数判断和结果返回，设计数据库操作，都调用 service 内封装的方法
-		context.JSON(http.StatusOK, gin.H{
-			"code": 200,
-			"msg":  "注册成功",
+	// 注册
+	err = userService.Register(*user)
+	if err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{
+			"code": "400",
+			"msg":  err.Error(),
+			"data": nil,
 		})
 	}
-	// 存在用户报已经注册
 }
