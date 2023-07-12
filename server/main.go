@@ -14,8 +14,8 @@ func main() {
 	initialize.InitConfig()
 
 	initPort := initialize.GetPort()
-	db := db.InitDb()
-	sqlDb, _ := db.DB()
+	initDb := db.InitDb()
+	sqlDb, _ := initDb.DB()
 	defer func(sqlDb *sql.DB) {
 		_ = sqlDb.Close()
 	}(sqlDb)

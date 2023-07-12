@@ -5,7 +5,9 @@ import (
 	"web_chat/server/controller"
 )
 
+// CollectRoute 路由
 func CollectRoute(r *gin.Engine) *gin.Engine {
 	r.POST("/api/auth/register", controller.Register)
+	r.POST("/api/auth/signIn", controller.SignIn)
 	return r
 }
