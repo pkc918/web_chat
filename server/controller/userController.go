@@ -19,8 +19,6 @@ func Register(context *gin.Context) {
 		// 响应一个错误信息，参数问题
 		return
 	}
-	// 这里要做验证，验证参数的格式等等
-
 	// 数据拼装
 	user := &model.User{
 		Email:    r.Email,
