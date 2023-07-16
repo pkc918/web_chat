@@ -9,7 +9,7 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 export const Input: React.FC<InputProps> = (props) => {
   const { className, label, children, ...rest } = props;
   const cn = classNames("grow-[1] shrink-0 basis-1", className, {
-    "border-r-[red]": children,
+    "border-l-none": children,
   });
 
   return (

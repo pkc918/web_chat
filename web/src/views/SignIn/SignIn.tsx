@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import weChat from "@/assets/imgs/wechat.jpg";
 import { Input } from "@/components/Input/Input";
+import { useNavigate } from "react-router";
 
 type signInTitleType = "验证码登录" | "密码登录";
 
 export const SignIn: React.FC = () => {
+  const navigate = useNavigate();
   const signInTitle: signInTitleType[] = ["验证码登录", "密码登录"];
   const [signTitleIndex, setSignTitleIndex] = useState<number>(1);
   const [val, setVal] = useState<string>("");
@@ -26,6 +28,7 @@ export const SignIn: React.FC = () => {
   // 提交
   const handleSubmit = (event: React.MouseEvent<HTMLButtonElement>) => {
     console.log("onClick", event);
+    navigate("/");
   };
 
   useEffect(() => {
@@ -35,7 +38,7 @@ export const SignIn: React.FC = () => {
 
   return (
     <div className="m-auto">
-      <h2 className="text-[red]">Web_Chat LoGo</h2>
+      <h1 className="text-[3rem] py-[2rem]">Web_Chat</h1>
       <div className="inline-block rounded-t-[10px] bg-[white]">
         <div className="flex">
           <div className="signBox mt-[1rem] border-r-2 border-solid border-[#eee]">
@@ -77,7 +80,9 @@ export const SignIn: React.FC = () => {
                   onBlur={onBlur}
                   onChange={onChange}
                 >
-                  <div className="h-full bg-[red]">获取验证码</div>
+                  <div className="h-[40px] flex items-center rounded-r-[5px] border-2 border-l-0 border-black border-solid px-[10px] text-white bg-[#3361ff] cursor-pointer">
+                    获取验证码
+                  </div>
                 </Input>
               )}
             </div>
@@ -100,7 +105,9 @@ export const SignIn: React.FC = () => {
         </div>
       </div>
       <div className="bg-white py-[1rem] rounded-b-[10px]">
-        注册登录即表示同意 用户协议 和 隐私政策
+        注册登录即表示同意
+        <span className="private"> 用户协议 </span>和
+        <span className="private"> 隐私政策 </span>
       </div>
     </div>
   );

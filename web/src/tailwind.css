@@ -7,5 +7,13 @@
 }
 
 .inputBorder {
-  @apply border-2 border-black border-solid rounded-[5px] text-[blue] h-[40px] focus:outline-none;
+  @apply border-2 border-black border-solid rounded-[5px] text-[#3361ff] h-[40px] focus:outline-none;
+}
+
+.border-l-none {
+  @apply rounded-r-none;
+}
+
+.private {
+  @apply text-[#3361ff] cursor-pointer;
 }

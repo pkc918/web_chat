@@ -1,5 +1,4 @@
 import "./App.css";
-import { MyComponent } from "./components/MyConponent";
 import { BrowserRouter } from "react-router-dom";
 import { Outlet, Route, Routes } from "react-router";
 import { Layout } from "./components/Layout";
@@ -7,7 +6,7 @@ import { SignIn } from "./views/SignIn/SignIn";
 
 function Global() {
   return (
-    <div className="w-[30cm] h-[20cm] bg-[#f7f8fa] flex">
+    <div className="w-[30cm] h-[20cm] rounded-[5px] bg-[#f7f8fa] flex">
       <Outlet></Outlet>
     </div>
   );
