@@ -12,27 +12,35 @@ import (
 type UserService struct {
 }
 
-func (userService *UserService) Register(user model.User) (err error) {
+func (userService *UserService) Register(register reqModel.Register) (err error) {
 	var DB = db.GetDB()
+	var user model.User
 	// 建表
 	err = DB.AutoMigrate(&user)
 	if err != nil {
 		return err
 	}
 	// 判断用户是否已经存在
-	if request.IsEmailExist(DB, user.Email) {
+	if request.IsEmailExist(DB, register.Email) {
 		return errors.New("手机号已注册！")
 	}
 	// 校验手机号，邮箱格式是否正确
-	if !request.IsTelephoneVerity(user.Mobile) {
+	if !request.IsTelephoneVerity(register.Mobile) {
 		return errors.New("手机号格式不正确！")
 	}
 	// 密码加密
-	password, err := bcrypt.GenerateFromPassword([]byte(user.PassWord), bcrypt.DefaultCost)
+	password, err := bcrypt.GenerateFromPassword([]byte(register.PassWord), bcrypt.DefaultCost)
 	if err != nil {
 		return err
 	}
-	user.PassWord = string(password)
+	user = model.User{
+		Email:    register.Email,
+		Mobile:   register.Mobile,
+		Avatar:   register.Avatar,
+		Sex:      register.Sex,
+		Nickname: register.Nickname,
+		PassWord: string(password),
+	}
 	// 用户信息入库
 	err = DB.Create(&user).Error
 	if err != nil {
@@ -51,9 +59,9 @@ func (userService *UserService) SignIn(signIn reqModel.SignIn) (err error) {
 		return result.Error
 	}
 	// 对比密码
-	if signIn.PassWord == user.PassWord {
-		// 返回登录数据
-		return nil
+	err = bcrypt.CompareHashAndPassword([]byte(user.PassWord), []byte(signIn.PassWord))
+	if err != nil {
+		return err
 	}
-	return errors.New("密码错误！")
+	return nil
 }
