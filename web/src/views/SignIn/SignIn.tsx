@@ -39,7 +39,7 @@ export const SignIn: React.FC = () => {
 
   return (
     <div className="m-auto">
-      <h1 className="text-[3rem] py-[2rem] flex justify-center">
+      <h1 className="text-[3rem] flex justify-center">
         <SvgIcon className="w-[10rem]" name="logo" />
         <div className="flex items-center">叮叮叮</div>
       </h1>
