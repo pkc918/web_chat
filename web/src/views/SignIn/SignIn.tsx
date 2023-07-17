@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import weChat from "@/assets/imgs/wechat.jpg";
 import { Input } from "@/components/Input/Input";
 import { useNavigate } from "react-router";
+import SvgIcon from "@/components/SvgIcon/SvgIcon";
 
 type signInTitleType = "验证码登录" | "密码登录";
 
@@ -38,7 +39,10 @@ export const SignIn: React.FC = () => {
 
   return (
     <div className="m-auto">
-      <h1 className="text-[3rem] py-[2rem]">Web_Chat</h1>
+      <h1 className="text-[3rem] py-[2rem] flex justify-center">
+        <SvgIcon className="w-[10rem]" name="logo" />
+        <div className="flex items-center">叮叮叮</div>
+      </h1>
       <div className="inline-block rounded-t-[10px] bg-[white]">
         <div className="flex">
           <div className="signBox mt-[1rem] border-r-2 border-solid border-[#eee]">
@@ -80,7 +84,7 @@ export const SignIn: React.FC = () => {
                   onBlur={onBlur}
                   onChange={onChange}
                 >
-                  <div className="h-[40px] flex items-center rounded-r-[5px] border-2 border-l-0 border-black border-solid px-[10px] text-white bg-[#3361ff] cursor-pointer">
+                  <div className="h-[40px] text-[0.6rem] flex items-center rounded-r-[5px] border-2 border-l-0 border-black border-solid px-[10px] text-white bg-[#3361ff] cursor-pointer">
                     获取验证码
                   </div>
                 </Input>
