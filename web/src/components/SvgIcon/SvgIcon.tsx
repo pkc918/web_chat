@@ -6,14 +6,13 @@ type IconProps = {
     color?: string;
 } & React.SVGAttributes<SVGElement>
 
-const SvgIcon = ( props: IconProps ) => {
+export const SvgIcon: React.FC<IconProps> = ( props ) => {
     const { name, prefix = "icon", color = "#333", ...rest } = props;
     const symbolId = `#${ prefix }-${ name }`;
 
     return (
-        <svg { ...rest }  aria-hidden="true">
+        <svg { ...rest } aria-hidden="true">
             <use href={ symbolId } fill={ color }/>
         </svg>
     );
 };
-export default SvgIcon;
