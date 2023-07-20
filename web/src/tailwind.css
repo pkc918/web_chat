@@ -3,17 +3,21 @@
 @tailwind utilities;
 
 .signBox {
-  @apply w-[30%] py-[1.5rem] px-[2rem] bg-white;
+    @apply w-[30%] py-[1.5rem] px-[2rem] bg-white;
 }
 
 .inputBorder {
-  @apply w-0 border-2 border-black border-solid rounded-[5px] text-[#3361ff] h-[40px] focus:outline-none px-2 mb-[1rem] text-[0.5rem];
+    @apply w-0 border-2 border-black border-solid rounded-[5px] text-[#3361ff] h-[40px] focus:outline-none px-2 mb-[1rem] text-[0.5rem];
 }
 
 .border-l-none {
-  @apply rounded-r-none;
+    @apply rounded-r-none;
 }
 
 .private {
-  @apply text-[#3361ff] cursor-pointer;
+    @apply text-[#3361ff] cursor-pointer;
+}
+
+.active {
+    @apply bg-white scale-105 scale-x-110 text-[#8a7bff] rounded-[0.5rem];
 }
