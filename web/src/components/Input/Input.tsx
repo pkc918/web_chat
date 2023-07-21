@@ -1,8 +1,8 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import classNames from "classnames";
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  label?: string;
+  label?: string | ReactNode;
   className?: string;
 }
 

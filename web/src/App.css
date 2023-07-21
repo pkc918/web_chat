@@ -49,3 +49,6 @@
   height: 100% !important;
 }
 
+input, textarea {
+  font-family: "Segoe UI Emoji", "Segoe UI Symbol", "Segoe UI", "Apple Color Emoji", "Twemoji Mozilla", "Noto Color Emoji", "Android Emoji" !important;
+}

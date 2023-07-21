@@ -1,9 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
+import data from "@emoji-mart/data/sets/14/apple.json";
+import Picker from "@emoji-mart/react";
 import { Input } from "@/components/Input/Input";
 import { SvgIcon } from "@/components/SvgIcon/SvgIcon";
 import { UserRecord } from "@/components/UserRecord/UserRecord";
 
 export const Chat: React.FC = () => {
+    const [message, setMessage] = useState<string>("");
+
+    const handleSelectEmoji = ( ...rest ) => {
+        console.log(rest[0]);
+        setMessage(message + (rest[0].native as string));
+    };
+    const handleInsertMessage = () => {
+
+    };
     return (
         <div className="Chat h-full flex flex-col pb-6">
             <header className="h-16 flex items-center">
@@ -20,12 +31,12 @@ export const Chat: React.FC = () => {
                                 <SvgIcon className="w-16 h-16" name="search"/>
                             </Input>
                         </div>
-                        <div data-simplebar className="flex-1 px-2 overflow-y-scroll"
-                        style={ {scrollbarWidth: "none"} }
+                        <div data-simplebar="true" className="flex-1 px-2 overflow-y-scroll"
+                             style={ { scrollbarWidth: "none" } }
                         >
                             {
-                                [1,2,3,4,5,6,7,8,9].map((val,index) => {
-                                    return <UserRecord key={val} />
+                                [1, 2, 3, 4, 5, 6, 7, 8, 9].map(( val, index ) => {
+                                    return <UserRecord key={ val }/>;
                                 })
                             }
                         </div>
@@ -35,21 +46,33 @@ export const Chat: React.FC = () => {
                             <header className="h-16 flex justify-between">
                                 <ul className="flex-1 flex items-center">
                                     <li className="h-full px-2 leading-[4rem] cursor-pointer flex items-center">
-                                        <SvgIcon className="w-6 h-6" name="phone" />
+                                        <SvgIcon className="w-6 h-6" name="phone"/>
                                     </li>
                                     <li className="h-full px-2 leading-[4rem] cursor-pointer flex items-center">
-                                        <SvgIcon className="w-6 h-6" name="video" />
+                                        <SvgIcon className="w-6 h-6" name="video"/>
                                     </li>
                                 </ul>
                                 <h2 className="leading-[4rem]">宝贝</h2>
                                 <div className="flex-1 flex justify-end">
                                     <div className="h-full px-2 cursor-pointer flex items-center ">
-                                        <SvgIcon className="w-6 h-6" name="more" />
+                                        <SvgIcon className="w-6 h-6" name="more"/>
                                     </div>
                                 </div>
                             </header>
                         </div>
-                        <div>下</div>
+                        <div className="bg-white">
+
+                            <Input className="h-[3rem]" label={ <div className="flex">
+                                <SvgIcon className="w-6 h-6" name="emoji"/>
+                                <SvgIcon className="w-6 h-6" name="image"/>
+                            </div> } value={ message }
+                                   onChange={ handleInsertMessage }>
+                                <div className="flex items-center px-4">
+                                    <SvgIcon className="w-6 h-6" name="send"/>
+                                </div>
+                            </Input>
+
+                        </div>
                     </div>
                 </main>
             </div>
