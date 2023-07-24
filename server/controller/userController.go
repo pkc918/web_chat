@@ -44,3 +44,22 @@ func SignIn(context *gin.Context) {
 		Token: "token",
 	}, "登录成功", context)
 }
+
+func AddCont(context *gin.Context) {
+	var c reqModel.Contact
+	err := context.ShouldBindJSON(&c)
+	if err != nil {
+		response.FailWithMessage("参数错误", context)
+		return
+	}
+	if c.Ownerid == c.Dstobj {
+		response.FailWithMessage("无法添加自己为好友", context)
+	}
+	// 添加好友/群
+	err = userService.AddCont(c)
+	if err != nil {
+		response.FailWithMessage(err.Error(), context)
+		return
+	}
+	response.OkWithMessage("添加成功", context)
+}

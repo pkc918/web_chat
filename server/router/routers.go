@@ -7,7 +7,12 @@ import (
 
 // CollectRoute 路由
 func CollectRoute(r *gin.Engine) *gin.Engine {
-	r.POST("/api/auth/register", controller.Register)
-	r.POST("/api/auth/signIn", controller.SignIn)
+	g1 := r.Group("/api")
+	{
+		g1.POST("/auth/register", controller.Register)
+		g1.POST("/auth/signIn", controller.SignIn)
+		g1.POST("/contact/add", controller.AddCont)
+	}
+
 	return r
 }

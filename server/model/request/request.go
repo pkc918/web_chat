@@ -16,3 +16,9 @@ type SignIn struct {
 	Email    string `json:"email"`
 	PassWord string `json:"password"`
 }
+
+// Contact User add contact request structure
+type Contact struct {
+	Ownerid int64 `json:"ownerid"`
+	Dstobj  int64 `json:"dstobj"`
+}
