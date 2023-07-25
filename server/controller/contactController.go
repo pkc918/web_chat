@@ -29,14 +29,20 @@ func AddCont(context *gin.Context) {
 }
 
 func GetContacts(context *gin.Context) {
-	var c reqModel.Contact
-	err := context.Bind(&c)
+	id := context.Query("ownerid")
+	// 查询用户好友列表
+	data, err := contactService.GetContacts(id)
 	if err != nil {
-		response.FailWithMessage("参数错误", context)
+		response.FailWithMessage(err.Error(), context)
 		return
 	}
-	// 查询用户好友列表
-	data, err := contactService.GetContacts(c)
+	response.OkWithData(data, context)
+}
+
+func GetContactInfo(context *gin.Context) {
+	id := context.Query("ownerid")
+	// 获取id用户的详情信息
+	data, err := contactService.GetContactInfo(id)
 	if err != nil {
 		response.FailWithMessage(err.Error(), context)
 		return
@@ -51,7 +57,7 @@ func DelContact(context *gin.Context) {
 		response.FailWithMessage("参数错误", context)
 		return
 	}
-	// 添加好友/群
+	// 删除好友/群
 	err = contactService.DelContact(c)
 	if err != nil {
 		response.FailWithMessage(err.Error(), context)

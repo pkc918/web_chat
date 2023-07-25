@@ -39,12 +39,17 @@ func (contactService *ContactService) AddContact(cont reqModel.Contact) (err err
 		// 提交事务
 		return nil
 	})
+	if err != nil {
+		return err
+	}
 	// 成功
 	return nil
 }
 
-func (contactService *ContactService) GetContacts(cont reqModel.Contact) (contacts []model.Contact, err error) {
-	db.DB.Where("ownerid = ? AND cate = ?", cont.Ownerid, model.CONCAT_CATE_USER).Find(&contacts)
+func (contactService *ContactService) GetContacts(id string) (contacts []model.Contact, err error) {
+	if err = db.DB.Where("ownerid = ? AND cate = ?", id, model.CONCAT_CATE_USER).Find(&contacts).Error; err != nil {
+		return nil, nil
+	}
 	return contacts, nil
 }
 
@@ -56,16 +61,25 @@ func (contactService *ContactService) DelContact(cont reqModel.Contact) (err err
 	}
 	// 开启事务
 	err = db.DB.Transaction(func(tx *gorm.DB) error {
-		// 将 2 设置为 1 的好友
-		if err := tx.Create(&model.Contact{
-			Ownerid: cont.Ownerid,
-			Dstobj:  cont.Dstobj,
-			Cate:    model.CONCAT_CATE_USER,
-		}).Error; err != nil {
+		if err := tx.Where("ownerid = ? AND dstobj = ? AND cate = ?", cont.Ownerid, cont.Dstobj, model.CONCAT_CATE_USER).Delete(&model.Contact{}).Error; err != nil {
+			return err
+		}
+
+		if err := tx.Where("ownerid = ? AND dstobj = ? AND cate = ?", cont.Dstobj, cont.Ownerid, model.CONCAT_CATE_USER).Delete(&model.Contact{}).Error; err != nil {
 			return err
 		}
 		return nil
 	})
-	db.DB.Where("ownerid = ? AND dstobj = ?", cont.Ownerid, cont.Dstobj).Delete(model.Contact{})
+	if err != nil {
+		return err
+	}
+	//db.DB.Where("ownerid = ? AND dstobj = ?", cont.Ownerid, cont.Dstobj).Delete(model.Contact{})
 	return nil
+}
+
+func (contactService *ContactService) GetContactInfo(id string) (user model.User, err error) {
+	if err = db.DB.Where("id = ?", id).Find(&user).Error; err != nil {
+		return model.User{}, nil
+	}
+	return user, nil
 }
