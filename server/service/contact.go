@@ -43,8 +43,29 @@ func (contactService *ContactService) AddContact(cont reqModel.Contact) (err err
 	return nil
 }
 
-func (contactService *ContactService) GetContacts(cont reqModel.Contact) ([]model.Contact, error) {
-	var contacts []model.Contact
+func (contactService *ContactService) GetContacts(cont reqModel.Contact) (contacts []model.Contact, err error) {
 	db.DB.Where("ownerid = ? AND cate = ?", cont.Ownerid, model.CONCAT_CATE_USER).Find(&contacts)
 	return contacts, nil
+}
+
+func (contactService *ContactService) DelContact(cont reqModel.Contact) (err error) {
+	var contact model.Contact
+	result := db.DB.Where("ownerid = ? AND dstobj = ?", cont.Ownerid, cont.Dstobj).First(&contact)
+	if result.RowsAffected != 1 {
+		return errors.New("你们已经不是好友了")
+	}
+	// 开启事务
+	err = db.DB.Transaction(func(tx *gorm.DB) error {
+		// 将 2 设置为 1 的好友
+		if err := tx.Create(&model.Contact{
+			Ownerid: cont.Ownerid,
+			Dstobj:  cont.Dstobj,
+			Cate:    model.CONCAT_CATE_USER,
+		}).Error; err != nil {
+			return err
+		}
+		return nil
+	})
+	db.DB.Where("ownerid = ? AND dstobj = ?", cont.Ownerid, cont.Dstobj).Delete(model.Contact{})
+	return nil
 }

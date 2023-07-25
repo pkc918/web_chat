@@ -44,18 +44,18 @@ func GetContacts(context *gin.Context) {
 	response.OkWithData(data, context)
 }
 
-//func DelContact(context *gin.Context) {
-//	var c reqModel.Contact
-//	err := context.ShouldBindJSON(&c)
-//	if err != nil {
-//		response.FailWithMessage("参数错误", context)
-//		return
-//	}
-//	// 添加好友/群
-//	err = contactService.DelContact(c)
-//	if err != nil {
-//		response.FailWithMessage(err.Error(), context)
-//		return
-//	}
-//	response.OkWithMessage("删除成功", context)
-//}
+func DelContact(context *gin.Context) {
+	var c reqModel.Contact
+	err := context.ShouldBindJSON(&c)
+	if err != nil {
+		response.FailWithMessage("参数错误", context)
+		return
+	}
+	// 添加好友/群
+	err = contactService.DelContact(c)
+	if err != nil {
+		response.FailWithMessage(err.Error(), context)
+		return
+	}
+	response.OkWithMessage("删除成功", context)
+}

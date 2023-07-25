@@ -13,7 +13,7 @@ func CollectRoute(r *gin.Engine) *gin.Engine {
 		g1.POST("/auth/signIn", controller.SignIn)
 		g1.POST("/contact/addContact", controller.AddCont)
 		g1.GET("/contact/getContacts", controller.GetContacts)
-		//g1.POST("/contact/delContact", controller.DelContact)
+		g1.POST("/contact/delContact", controller.DelContact)
 	}
 
 	return r
