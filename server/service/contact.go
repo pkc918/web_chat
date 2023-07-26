@@ -11,9 +11,9 @@ import (
 type ContactService struct {
 }
 
-func (contactService *ContactService) AddContact(cont reqModel.Contact) (err error) {
+func (contactService *ContactService) AddContact(cont reqModel.Contact, cate int) (err error) {
 	var contact model.Contact
-	result := db.DB.Where("ownerid = ? AND dstobj = ? AND cate = ?", cont.Ownerid, cont.Dstobj, model.CONCAT_CATE_USER).First(&contact)
+	result := db.DB.Where("ownerid = ? AND dstobj = ? AND cate = ?", cont.Ownerid, cont.Dstobj, cate).First(&contact)
 	if result.RowsAffected == 1 {
 		return errors.New("用户已经是好友了！")
 	}
@@ -23,7 +23,7 @@ func (contactService *ContactService) AddContact(cont reqModel.Contact) (err err
 		if err := tx.Create(&model.Contact{
 			Ownerid: cont.Ownerid,
 			Dstobj:  cont.Dstobj,
-			Cate:    model.CONCAT_CATE_USER,
+			Cate:    cate,
 		}).Error; err != nil {
 			return err
 		}
@@ -32,7 +32,7 @@ func (contactService *ContactService) AddContact(cont reqModel.Contact) (err err
 		if err := tx.Create(&model.Contact{
 			Ownerid: cont.Dstobj,
 			Dstobj:  cont.Ownerid,
-			Cate:    model.CONCAT_CATE_USER,
+			Cate:    cate,
 		}).Error; err != nil {
 			return err
 		}
@@ -46,14 +46,14 @@ func (contactService *ContactService) AddContact(cont reqModel.Contact) (err err
 	return nil
 }
 
-func (contactService *ContactService) GetContacts(id string) (contacts []model.Contact, err error) {
-	if err = db.DB.Where("ownerid = ? AND cate = ?", id, model.CONCAT_CATE_USER).Find(&contacts).Error; err != nil {
+func (contactService *ContactService) GetContacts(id string, cate int) (contacts []model.Contact, err error) {
+	if err = db.DB.Where("ownerid = ? AND cate = ?", id, cate).Find(&contacts).Error; err != nil {
 		return nil, nil
 	}
 	return contacts, nil
 }
 
-func (contactService *ContactService) DelContact(cont reqModel.Contact) (err error) {
+func (contactService *ContactService) DelContact(cont reqModel.Contact, cate int) (err error) {
 	var contact model.Contact
 	result := db.DB.Where("ownerid = ? AND dstobj = ?", cont.Ownerid, cont.Dstobj).First(&contact)
 	if result.RowsAffected != 1 {
@@ -61,11 +61,11 @@ func (contactService *ContactService) DelContact(cont reqModel.Contact) (err err
 	}
 	// 开启事务
 	err = db.DB.Transaction(func(tx *gorm.DB) error {
-		if err := tx.Where("ownerid = ? AND dstobj = ? AND cate = ?", cont.Ownerid, cont.Dstobj, model.CONCAT_CATE_USER).Delete(&model.Contact{}).Error; err != nil {
+		if err := tx.Where("ownerid = ? AND dstobj = ? AND cate = ?", cont.Ownerid, cont.Dstobj, cate).Delete(&model.Contact{}).Error; err != nil {
 			return err
 		}
 
-		if err := tx.Where("ownerid = ? AND dstobj = ? AND cate = ?", cont.Dstobj, cont.Ownerid, model.CONCAT_CATE_USER).Delete(&model.Contact{}).Error; err != nil {
+		if err := tx.Where("ownerid = ? AND dstobj = ? AND cate = ?", cont.Dstobj, cont.Ownerid, cate).Delete(&model.Contact{}).Error; err != nil {
 			return err
 		}
 		return nil
@@ -73,12 +73,11 @@ func (contactService *ContactService) DelContact(cont reqModel.Contact) (err err
 	if err != nil {
 		return err
 	}
-	//db.DB.Where("ownerid = ? AND dstobj = ?", cont.Ownerid, cont.Dstobj).Delete(model.Contact{})
 	return nil
 }
 
-func (contactService *ContactService) GetContactInfo(id string) (user model.User, err error) {
-	if err = db.DB.Where("id = ?", id).Find(&user).Error; err != nil {
+func (contactService *ContactService) GetContactInfo(id string, cate int) (user model.User, err error) {
+	if err = db.DB.Where("id = ? AND cate = ?", id, cate).Find(&user).Error; err != nil {
 		return model.User{}, nil
 	}
 	return user, nil
