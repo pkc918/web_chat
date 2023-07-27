@@ -1,17 +1,17 @@
 package ws
 
 type Hub struct {
-	// 当前在此ws里面的客户端
+	// 当前注册的客户端
 	clients map[*Client]bool
-	// 有消息推送给其他
+	// 广播
 	broadcast chan []byte
-	// 注册进
+	// 注册
 	register chan *Client
 	// 取消注册
 	unregister chan *Client
 }
 
-func newHub() *Hub {
+func NewHub() *Hub {
 	return &Hub{
 		broadcast:  make(chan []byte),
 		register:   make(chan *Client),
@@ -20,7 +20,7 @@ func newHub() *Hub {
 	}
 }
 
-func (h *Hub) run() {
+func (h *Hub) Run() {
 	for {
 		select {
 		case client := <-h.register:
