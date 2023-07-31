@@ -21,3 +21,15 @@
 .active {
     @apply bg-white scale-105 scale-x-110 text-[#8a7bff] rounded-[0.5rem];
 }
+
+.direction {
+    @apply absolute top-[50%] origin-center rotate-45 translate-y-[-50%] w-4 h-4 bg-[#bbeba1] rounded-[3px] z-[1];
+}
+
+.direction-right {
+    @apply right-[-0.3rem];
+}
+
+.direction-left{
+    @apply left-[-0.3rem];
+}
