@@ -6,5 +6,10 @@ datasource:
   port: 3306
   database: web_chat
   username: root
-  password: Pankechun2000918
+  password: yourMysqlPsw
   charset: utf8mb4
+oss:
+  OSSBucket: yourBucket
+  OSSEndpoint: yourEndpoint
+  OSSAccessKeyID: yourAccessKeyID
+  OSSAccessKeySecret: yourAccessKeySecret

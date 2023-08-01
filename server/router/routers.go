@@ -3,10 +3,12 @@ package router
 import (
 	"github.com/gin-gonic/gin"
 	"web_chat/server/controller"
+	"web_chat/server/middleware"
 )
 
 // CollectRoute 路由
 func CollectRoute(r *gin.Engine) *gin.Engine {
+	r.Use(middleware.CORSMiddleware())
 	g1 := r.Group("/api")
 	{
 		// 用户登录注册
